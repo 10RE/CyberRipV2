@@ -8,7 +8,7 @@ import { ApplicationForm, CustomizationForm, NoticeBoardView, IntroView } from '
 import { useGameLoop } from './hooks/useGameLoop';
 import { useFuneralSystem } from './hooks/useFuneralSystem';
 import { generateMap } from './utils/mapGenerator';
-import { TILE_SIZE } from './types';
+import { TILE_SIZE, Interactable } from './types';
 
 type ModalType = 'APPLICATION' | 'WARDROBE' | 'NOTICE' | 'INTRO' | null;
 
@@ -45,13 +45,14 @@ const Game: React.FC = () => {
 
         // Find nearest interactable
         Object.entries(map.interactables).forEach(([key, obj]) => {
+            const interactable = obj as Interactable;
             const [ty, tx] = key.split(',').map(Number);
             const objCenter = { x: tx * TILE_SIZE + TILE_SIZE / 2, y: ty * TILE_SIZE + TILE_SIZE / 2 };
             const dist = Math.hypot(playerCenter.x - objCenter.x, playerCenter.y - objCenter.y);
             if (dist < minDist) { 
                 minDist = dist; 
-                nearest = obj;
-                nearestId = obj.id;
+                nearest = interactable;
+                nearestId = interactable.id;
             }
         });
 
